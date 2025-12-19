@@ -17,6 +17,11 @@ jobs:
     permissions:
       contents: read
       packages: write
+    strategy:
+      matrix:
+        platform:
+          - linux/amd64
+          - linux/arm64
 
     steps:
       - name: Checkout code
@@ -40,6 +45,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
+          platforms: ${{ matrix.platform }}
           push: true
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:2
