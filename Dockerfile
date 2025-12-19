@@ -1,0 +1,12 @@
+# ---- build stage ----
+ARG CADDY_VERSION=2
+FROM caddy:${CADDY_VERSION}-builder AS builder
+
+RUN xcaddy build \
+    --with github.com/caddy-dns/cloudflare \
+    --with github.com/mholt/caddy-l4
+
+# ---- runtime stage ----
+FROM caddy:${CADDY_VERSION}
+
+COPY --from=builder /usr/bin/caddy /usr/bin/caddy
